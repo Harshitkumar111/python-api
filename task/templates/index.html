@@ -1,0 +1,133 @@
+{% extends 'base.html' %} 
+{% block title %} Curd {% endblock %}
+{% block content %}
+<div class="container">
+    <div class="table-responsive">
+        <div class="table-wrapper">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h2>Manage <b>Employees</b></h2>
+                    </div>                  
+                </div>
+            </div>
+            <table class="table table-striped table-hover">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>First Name</th>
+                        <th>Lats name</th>
+                        <th>Email</th>                       
+                    </tr>
+                </thead>
+                <tbody id="articles" >                      
+                   
+                </tbody>       
+            </table>
+            {% for i in page_range %}
+              <a style="margin-left: 5px; " href="{{i}}">{{i}}</a>
+            {% endfor %}
+        </div>
+    </div>        
+</div>
+<div class="container">
+    <div class="row">
+      <div class="col text-center">
+        <button type="button" id="toggle-btn1" class="btn btn-primary">GET</button>
+        <button type="button" id="toggle-btn" class="btn btn-secondary">POST</button>
+        <button type="button" id="toggle-btn2" class="btn btn-success">PUT</button>
+        <button type="button" id="toggle-btn3" class="btn btn-danger">DELETE</button>
+      </div>
+    </div>
+  </div>
+  <div class="main_div">
+    <div class="left">
+       <h3>Request</h3>
+       <form class="text-form1" style="display:none;">
+        <div class="form-group">
+          <label for="exampleInputEmail1">Enter Your Id </label>
+          <input type="text" class="form-control" name="ids" aria-describedby="emailHelp" placeholder="Enter email">
+        </div>     
+        <button type="button" class="btn btn-primary" onClick="serach()"  >Submit</button>
+      </form>
+      <form class="text-form" style="display:none;">  
+        <div class="form-group">
+            <label>Username</label>
+            <input type="text" class="form-control" name="name">
+        </div>
+        <div class="form-group">
+            <label>First Name</label>
+            <input type="text" class="form-control" name="fname">
+        </div>
+        <div class="form-group">
+            <label>Last name</label>
+            <input type="text" class="form-control" name="lname">
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" class="form-control" name="email">
+        </div>
+
+        <div class="form-group">
+          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+          <input type="button" onClick="add()" class="btn btn-success" value="Add">
+        </div>
+       </form>
+
+        <form class="text-form2" style="display:none;">  
+            <div class="form-group">
+                <label>ID</label>
+                <input type="text" class="form-control" name="upid">
+            </div>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" name="upname">
+            </div>
+            <div class="form-group">
+                <label>First Name</label>
+                <input type="text" class="form-control" name="upfname">
+            </div>
+            <div class="form-group">
+                <label>Last name</label>
+                <input type="text" class="form-control" name="uplname">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" class="form-control" name="upemail">
+            </div>
+
+            <div class="form-group">
+            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
+            <input type="button" onClick="Update()" class="btn btn-success" value="Add">
+            </div>
+        </form>
+
+        <form class="text-form3" style="display:none;">
+            <div class="form-group">
+            <label>Enter Your Delete Id </label>
+            <input type="text" class="form-control" name="deleteuser" id="deleteuser"  placeholder="Enter Your delete Id">
+            </div>
+        
+            <button type="button" class="btn btn-primary" onClick="DeleteUser()"  >Submit</button>
+        </form>
+    </div>
+    <div class="rigth">
+        <h3>Response</h3>
+        <div class="text-form1">
+          <p id="demo"  style="width:80%; color:white;"></p> 
+        </div>
+        <div class="text-form" >
+            <p id="test"  style="width:80%; color:white;"></p> 
+        </div>
+        <div class="text-form2" >
+            <p id="update"  style="width:80%; color:white;"></p> 
+        </div>
+        <div class="text-form3" >
+            <p id="delete"  style="width:80%; color:white;"></p> 
+        </div>
+     </p> 
+</div>
+{% endblock %} 
+
+

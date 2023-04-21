@@ -1,0 +1,235 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}  {% endblock %}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="{% static "style.css"  %}" >
+
+
+</head>
+<body>
+{% block content %}
+
+{% endblock %}
+<script src="//code.jquery.com/jquery-3.4.1.min.js" type="text/javascript" charset="utf-8"></script> 
+<script src="//unpkg.com/json-format-highlight@1.0.1/dist/json-format-highlight.js" type="text/javascript" charset="utf-8"></script> 
+<script>
+    $(document).ready(function(){
+        // Activate tooltip
+        $('[data-toggle="tooltip"]').tooltip();        
+        // Select/Deselect checkboxes
+        var checkbox = $('table tbody input[type="checkbox"]');
+        $("#selectAll").click(function(){
+            if(this.checked){
+                checkbox.each(function(){
+                    this.checked = true;                        
+                });
+            } else{
+                checkbox.each(function(){
+                    this.checked = false;                        
+                });
+            } 
+        });
+        checkbox.click(function(){
+            if(!this.checked){
+                $("#selectAll").prop("checked", false);
+            }
+        });
+    });
+    $(document).ready(function(){
+        $('#toggle-btn').click(function () {
+           if ($('.text-form').is(':hidden')) {
+               $('.text-form').show();
+           } else {
+               $('.text-form').hide();
+           }
+         }); 
+       });
+       $(document).ready(function(){
+        $('#toggle-btn1').click(function () {
+           if ($('.text-form1').is(':hidden')) {
+               $('.text-form1').show();
+           } else {
+               $('.text-form1').hide();
+           }
+         }); 
+       });
+       $(document).ready(function(){
+        $('#toggle-btn2').click(function () {
+           if ($('.text-form2').is(':hidden')) {
+               $('.text-form2').show();
+           } else {
+               $('.text-form2').hide();
+           }
+         }); 
+       });
+       $(document).ready(function(){
+        $('#toggle-btn3').click(function () {
+           if ($('.text-form3').is(':hidden')) {
+               $('.text-form3').show();
+           } else {
+               $('.text-form3').hide();
+           }
+         }); 
+       });
+</script>
+<script>
+
+    tablerecord()
+    function tablerecord(){            
+            var page_no = '1';
+           
+           
+                $.ajax({
+                        type: "POST",					
+                        url: "{% url 'index' %}", 
+                        data : {    
+                        page_no : page_no, 
+                        csrfmiddlewaretoken: '{{ csrf_token }}',
+                    },				
+                    success: function (response) {
+                        
+                        $('#articles').html('')
+                        $.each(response.results, function(i, val) {					
+                         $('#articles').append('<tr><td>'+val.id+'</td><td>'+val.Username+'</td><td>'+val.First_name+'</td><td>'+val.Last_name+'</td><td>'+val.email+'</td></tr>')
+                        });
+                     
+                    },
+                    error: function () {
+                        alert('Error Occured');
+                    }
+                }); 
+           
+      
+    } 
+  
+	$('a').click(function(event){
+        
+		event.preventDefault();
+        
+        
+		var page_no = $(this).attr('href');
+			$.ajax({
+					type: "POST",					
+					url: "{% url 'index' %}", 
+					data : {    
+					page_no : page_no, 
+					csrfmiddlewaretoken: '{{ csrf_token }}',
+				},				
+				success: function (response) {
+					$('#articles').html('')
+					$.each(response.results, function(i, val) {					
+                     $('#articles').append('<tr><td>'+val.id+'</td><td>'+val.Username+'</td><td>'+val.First_name+'</td><td>'+val.Last_name+'</td><td>'+val.email+'</td></tr>')
+                    });
+                    
+				},
+				error: function () {
+					alert('Error Occured');
+				}
+			}); 
+       
+	}); 
+ 
+  
+    function add(){               
+        var name=$("input[name=name]").val(); 
+        var fname=$("input[name=fname]").val(); 
+        var lname=$("input[name=lname]").val(); 
+        var email=$("input[name=email]").val();         
+        var fordata=new FormData();                   
+            fordata.append('name',name);
+            fordata.append('fname',fname);
+            fordata.append('lname',lname);
+            fordata.append('email',email);            
+            fordata.append('csrfmiddlewaretoken','{{ csrf_token }}');
+            $.ajax({
+            type: "POST",
+            url: '/save',
+            data: fordata,
+            processData: false,
+            contentType: false,
+            success: function(response){                
+                var formatted = jsonFormatHighlight(response[0])                   
+                document.getElementById("test").innerHTML =('<pre>\n' + formatted + '\n</pre>')      
+                tablerecord()
+                }              
+          });
+      }
+    function serach(){
+        var ids=$("input[name=ids]").val();         
+        var fordata=new FormData();                   
+            fordata.append('id',ids);
+            fordata.append('csrfmiddlewaretoken','{{ csrf_token }}');
+            $.ajax({
+                type: "POST",
+                url: '/dataapi/'+ids+'',
+                data: fordata,
+                processData: false,
+                contentType: false,
+                success: function(response){                   
+                    var formatted = jsonFormatHighlight(response[0])                   
+                    document.getElementById("demo").innerHTML =('<pre>\n' + formatted + '\n</pre>')              
+                    } 
+                                 
+              });
+    }
+    function Update(){    
+        var id=$("input[name=upid]").val();            
+        var name=$("input[name=upname]").val(); 
+        var fname=$("input[name=upfname]").val(); 
+        var lname=$("input[name=uplname]").val(); 
+        var email=$("input[name=upemail]").val();         
+        var fordata=new FormData(); 
+            fordata.append('id',id);                  
+            fordata.append('name',name);
+            fordata.append('fname',fname);
+            fordata.append('lname',lname);
+            fordata.append('email',email);
+            
+            fordata.append('csrfmiddlewaretoken','{{ csrf_token }}');
+            $.ajax({
+            type: "POST",
+            url: '/update/'+id+'',
+            data: fordata,
+            processData: false,
+            contentType: false,
+            success: function(response){                   
+                var formatted = jsonFormatHighlight(response[0])                  
+                document.getElementById("update").innerHTML =('<pre>\n' + formatted + '\n</pre>')        
+                tablerecord()     
+                }              
+          });
+      }
+      function DeleteUser(){
+        var userdata=$("input[name=deleteuser]").val()       
+        console.log(userdata);        
+        var fordata=new FormData(); 
+            fordata.append('deleteuser',userdata);           
+            fordata.append('csrfmiddlewaretoken','{{ csrf_token }}');
+            $.ajax({
+                type: "POST",
+                url: '/delete/'+userdata+'',
+                data: fordata,
+                processData: false,
+                contentType: false,
+                success: function(response){   
+                    tablerecord() 
+                    var formatted = jsonFormatHighlight(response)                  
+                    document.getElementById("delete").innerHTML =('<pre>\n' + formatted + '\n</pre>')                        
+                    }              
+                });
+            }
+	</script>
+</body>
+</html>
